@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { queryDocuments } from "../services/api";
-import { Message, SourceChunk } from "../types";
+import { Message } from "../types";
 import styles from "./ChatInterface.module.css";
 
 export interface ChatInterfaceProps {

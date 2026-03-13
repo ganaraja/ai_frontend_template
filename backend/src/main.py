@@ -21,12 +21,20 @@ import os
 import asyncio
 from datetime import datetime, timezone
 
-from models import (
-    CreateCollectionRequest,
-    CreateCollectionResponse,
-    DeleteCollectionResponse,
-)
-from qdrant_manager import QdrantManager
+try:
+    from .models import (
+        CreateCollectionRequest,
+        CreateCollectionResponse,
+        DeleteCollectionResponse,
+    )
+    from .qdrant_manager import QdrantManager
+except ImportError:
+    from models import (
+        CreateCollectionRequest,
+        CreateCollectionResponse,
+        DeleteCollectionResponse,
+    )
+    from qdrant_manager import QdrantManager
 
 # Environment variable configuration
 QDRANT_PATH = os.getenv("QDRANT_PATH", "./qdrant_db")
@@ -182,7 +190,7 @@ async def general_exception_handler(request: Request, exc: Exception):
     error_context = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "path": request.url.path,
-        "method": request.method",
+        "method": request.method,
         "error_type": type(exc).__name__
     }
     logger.error(

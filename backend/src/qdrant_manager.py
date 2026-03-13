@@ -24,7 +24,10 @@ from qdrant_client.models import (
     QueryRequest,
     Query,
 )
-from models import DocumentChunk, SparseVector
+try:
+    from .models import DocumentChunk, SparseVector
+except ImportError:
+    from models import DocumentChunk, SparseVector
 
 
 class QdrantManager:

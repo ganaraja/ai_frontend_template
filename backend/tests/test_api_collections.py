@@ -11,6 +11,29 @@ from src.main import app
 client = TestClient(app)
 
 
+@pytest.fixture(autouse=True)
+def cleanup_collections():
+    """Clean up test collections before and after each test."""
+    # Get all collections
+    response = client.get("/api/collections")
+    if response.status_code == 200:
+        collections = response.json()
+        # Delete all test collections
+        for collection in collections:
+            if collection.startswith("test-"):
+                client.delete(f"/api/collections/{collection}")
+    
+    yield
+    
+    # Cleanup after test
+    response = client.get("/api/collections")
+    if response.status_code == 200:
+        collections = response.json()
+        for collection in collections:
+            if collection.startswith("test-"):
+                client.delete(f"/api/collections/{collection}")
+
+
 def test_health_check():
     """Test health check endpoint."""
     response = client.get("/health")
@@ -50,7 +73,7 @@ def test_create_collection_duplicate():
 def test_create_collection_empty_name():
     """Test creating collection with empty name fails."""
     response = client.post("/api/collections", json={"collection_name": ""})
-    assert response.status_code == 400
+    assert response.status_code == 422  # Pydantic validation error
 
 
 def test_delete_collection():

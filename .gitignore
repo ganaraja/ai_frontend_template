@@ -24,8 +24,9 @@ venv/
 ENV/
 env/
 
-# Qdrant
+# Qdrant / DB artifacts
 qdrant_db/
+test_db/
 *.sqlite
 
 # Node
